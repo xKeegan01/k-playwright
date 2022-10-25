@@ -58,6 +58,13 @@ public class HomePage extends InitialPage{
         return page.url().split("/")[5];
     }
 
+    public void createEmptyPlaylist(String name) {
+        getPlusIconLocator().click();
+        getNewPlaylistLocator().click();
+        getPlaylistNameLocator().fill(name);
+        getPlaylistNameLocator().press("Enter");
+    }
+
     private Locator getPlaylistLink(String playListID) {
         return page.locator("//*[@href='#!/playlist/" + playListID + "']");
     }
@@ -90,6 +97,12 @@ public class HomePage extends InitialPage{
     public boolean isPresent(String playListID, String playListName) {
         Locator playlistID = getPlaylistLink(playListID);
         return playlistID.isVisible() && playlistID.innerText().equals(playListName);
+    }
+
+    //check if playlist is not created
+    public boolean isNotCreated() {
+        getPlaylistNameLocator().waitFor();
+        return getPlaylistNameLocator().isVisible();
     }
 
     public LoginPage logOut() {

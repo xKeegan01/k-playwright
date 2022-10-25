@@ -11,19 +11,28 @@ public class PlayListsTest extends InitialTestData {
     @Test
     public void createNewPlaylist() {
         String randomPlaylistName = faker.aviation().aircraft();
-        LoginPage loginKoel = new LoginPage(page);
-        loginKoel.openURL(url);
-        HomePage homePageObject = loginKoel.loginCredentials(username, pass );
+        LoginPage login = new LoginPage(page);
+        login.openURL(url);
+        HomePage homePageObject = login.loginCredentials(username, pass );
         String playListID = homePageObject.createPlaylist(randomPlaylistName);
         Assert.assertTrue(homePageObject.isPresent(playListID, randomPlaylistName));
+    }
+
+    @Test
+    public void createEmptyPlaylist() {
+        LoginPage login = new LoginPage(page);
+        login.openURL(url);
+        HomePage homePageObject = login.loginCredentials(username, pass );
+        homePageObject.createEmptyPlaylist("");
+        Assert.assertTrue(homePageObject.isNotCreated());
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void renamePlayList() {
         String randomPlaylistName = faker.hobbit().location();
-        LoginPage loginKoel = new LoginPage(page);
-        loginKoel.openURL(url);
-        HomePage homePageObject = loginKoel.loginCredentials(username, pass);
+        LoginPage login = new LoginPage(page);
+        login.openURL(url);
+        HomePage homePageObject = login.loginCredentials(username, pass);
         String playListID = homePageObject.createPlaylist(randomPlaylistName);
 
         String newPlaylistName = faker.harryPotter().character();
@@ -34,9 +43,9 @@ public class PlayListsTest extends InitialTestData {
     @Test
     public void deletePlaylist() {
         String randomPlaylistName = faker.hobbit().location();
-        LoginPage loginKoel = new LoginPage(page);
-        loginKoel.openURL(url);
-        HomePage homePageObject = loginKoel.loginCredentials(username, pass);
+        LoginPage login = new LoginPage(page);
+        login.openURL(url);
+        HomePage homePageObject = login.loginCredentials(username, pass);
         String playListID = homePageObject.createPlaylist(randomPlaylistName);
 
         homePageObject.deletePlaylist(playListID);

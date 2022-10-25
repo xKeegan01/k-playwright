@@ -2,6 +2,7 @@ package pageObjects;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.MouseButton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,10 @@ public class HomePage extends InitialPage{
         super(page);
     }
 
+    private Locator logOutBtn() {
+        return page.locator("//*[@data-testid='btn-logout']");
+    }
+
     //check if logout btn is displayed
     public boolean isHomePage() {
         page.locator("//*[@data-testid='btn-logout']").waitFor();
@@ -21,25 +26,30 @@ public class HomePage extends InitialPage{
 
     //playlist elements
     private Locator getPlusIconLocator() {
-
         return page.locator("//*[@id='playlists']//i");
     }
 
     private Locator getNewPlaylistLocator() {
-        return page.locator("//*[@data-testid='playlist-context-menu-create-simple']");
+        return page.locator("//*[contains(text(), 'New Playlist')]");
     }
 
     private Locator getPlaylistNameLocator() {
-
         return page.locator("//form[@class='create']//input");
     }
     private Locator getRenameInput() {
-
         return page.locator("//input[@data-testid='inline-playlist-name-input']");
+    }
+
+    //delete playlist elements
+    private Locator getDeleteBtn() {
+        page.locator("//*[contains(text(), 'Delete')]").waitFor();
+        return page.locator("//*[contains(text(), 'Delete')]");
     }
 
     //create playlist
     public String createPlaylist(String playlistName) {
+        logger.info("playlist has been created");
+
         getPlusIconLocator().click();
         getNewPlaylistLocator().click();
         getPlaylistNameLocator().fill(playlistName);
@@ -52,14 +62,8 @@ public class HomePage extends InitialPage{
         return page.locator("//*[@href='#!/playlist/" + playListID + "']");
     }
 
-    //check if playlist is present
-    public boolean isPresent(String playListID, String playListName) {
-            Locator playlistID = getPlaylistLink(playListID);
-            return playlistID.isVisible() && playlistID.innerText().equals(playListName);
-    }
-
     public void renamePlaylist(String playlistId, String newPlaylistName) {
-        logger.info("playlist has been successfully renamed");
+        logger.info("playlist has been renamed");
 
         Locator element = getPlaylistLink(playlistId);
         element.scrollIntoViewIfNeeded();
@@ -70,6 +74,26 @@ public class HomePage extends InitialPage{
         renameInput.press("Enter");
         // Wait for the second green banner
         page.locator("//*[contains(text(), 'Updated playlist')]").waitFor();
+    }
 
+    public void deletePlaylist(String playlistID) {
+        logger.info("playlist has been deleted");
+
+        Locator elem = getPlaylistLink(playlistID);
+        elem.scrollIntoViewIfNeeded();
+        elem.click(new Locator.ClickOptions().setButton(MouseButton.RIGHT));
+        getDeleteBtn().click();
+        page.locator("//*[contains(text(), 'Deleted playlist')]").waitFor();
+    }
+
+    //check if playlist is present
+    public boolean isPresent(String playListID, String playListName) {
+        Locator playlistID = getPlaylistLink(playListID);
+        return playlistID.isVisible() && playlistID.innerText().equals(playListName);
+    }
+
+    public LoginPage logOut() {
+        logOutBtn().click();
+        return new LoginPage(page);
     }
 }

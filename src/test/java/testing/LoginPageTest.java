@@ -22,4 +22,13 @@ public class LoginPageTest extends InitialTestData {
         loginPage.loginCredentials("wrongEmail@email.com", "wrongPassword");
         Assert.assertTrue(loginPage.isError());
     }
+
+    @Test
+    public void logOut() {
+        LoginPage loginPage = new LoginPage(page);
+        loginPage.openURL(url);
+        HomePage homePageObject = loginPage.loginCredentials(username, pass);
+        LoginPage logOut = homePageObject.logOut();
+        Assert.assertTrue(logOut.isLoggedOut());
+    }
 }

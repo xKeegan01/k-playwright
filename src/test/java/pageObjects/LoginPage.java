@@ -7,27 +7,22 @@ public class LoginPage extends InitialPage {
 
 
     public LoginPage(Page page) {
-
         super(page);
     }
 
     private Locator getEmailLocator() {
-
         return page.locator("//*[@type='email']");
     }
 
     private Locator getPasswordLocator() {
-
         return page.locator("//*[@type='password']");
     }
 
     private Locator getLoginButton() {
-
         return page.locator("//*[text()='Log In']");
     }
 
     public void openURL(String url) {
-
         page.navigate(url);
     }
 
@@ -42,5 +37,10 @@ public class LoginPage extends InitialPage {
     public boolean isError() {
         page.locator(".error").waitFor();
         return page.locator(".error").isVisible();
+    }
+
+    public boolean isLoggedOut() {
+        getLoginButton().waitFor();
+        return getLoginButton().isVisible();
     }
 }

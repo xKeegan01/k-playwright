@@ -1,6 +1,6 @@
 package testing;
 
-import listeners.RetryAnalyzer;
+import helpers.RetryAnalyzer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pageObjects.HomePage;
@@ -29,6 +29,18 @@ public class PlayListsTest extends InitialTestData {
         String newPlaylistName = faker.harryPotter().character();
         homePageObject.renamePlaylist(playListID, newPlaylistName);
         Assert.assertTrue(homePageObject.isPresent(playListID, newPlaylistName));
+    }
+
+    @Test
+    public void deletePlaylist() {
+        String randomPlaylistName = faker.hobbit().location();
+        LoginPage loginKoel = new LoginPage(page);
+        loginKoel.openURL(url);
+        HomePage homePageObject = loginKoel.loginCredentials(username, pass);
+        String playListID = homePageObject.createPlaylist(randomPlaylistName);
+
+        homePageObject.deletePlaylist(playListID);
+        Assert.assertFalse(homePageObject.isPresent(playListID, randomPlaylistName));
     }
 
 

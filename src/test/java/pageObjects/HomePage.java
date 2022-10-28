@@ -14,14 +14,20 @@ public class HomePage extends InitialPage{
         super(page);
     }
 
+    //get all songs page element
+    private Locator getAllSongsPage() {
+        return page.locator("//*[@class='songs']");
+    }
+
     private Locator logOutBtn() {
         return page.locator("//*[@data-testid='btn-logout']");
     }
 
+
     //check if logout btn is displayed
     public boolean isHomePage() {
-        page.locator("//*[@data-testid='btn-logout']").waitFor();
-        return page.locator("//*[@data-testid='btn-logout']").isVisible();
+        logOutBtn().waitFor();
+        return logOutBtn().isVisible();
     }
 
     //playlist elements
@@ -108,5 +114,10 @@ public class HomePage extends InitialPage{
     public LoginPage logOut() {
         logOutBtn().click();
         return new LoginPage(page);
+    }
+
+    public SongsPage getSongsPage() {
+        getAllSongsPage().click();
+        return new SongsPage(page);
     }
 }

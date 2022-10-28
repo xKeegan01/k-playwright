@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pageObjects.HomePage;
 import pageObjects.LoginPage;
+import pageObjects.SongsPage;
 
 public class PlayListsTest extends InitialTestData {
 
@@ -50,6 +51,19 @@ public class PlayListsTest extends InitialTestData {
 
         homePageObject.deletePlaylist(playListID);
         Assert.assertFalse(homePageObject.isPresent(playListID, randomPlaylistName));
+    }
+
+    @Test
+    public void playRandomSong() {
+        LoginPage login = new LoginPage(page);
+        login.openURL(url);
+        HomePage homePageObject = login.loginCredentials(username, pass);
+        SongsPage songsPage = homePageObject.getSongsPage();
+        Assert.assertTrue(songsPage.isAllSongsPage());
+
+        songsPage.playRandomSong();
+        Assert.assertTrue(songsPage.isPlaying());
+
     }
 
 
